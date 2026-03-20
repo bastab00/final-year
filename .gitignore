@@ -11,3 +11,7 @@ __pycache__/
 # Node
 node_modules/
 .next/
+
+# Env
+.env.local
+.env*.local
