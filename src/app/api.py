@@ -24,13 +24,14 @@ app.add_middleware(
 )
 
 _models: dict = {}
+_sbert_clf = None
 _dataset: pd.DataFrame = None
 _sbert = None
 _embeddings: np.ndarray = None
 
 @app.on_event("startup")
 def startup():
-    global _models, _dataset, _sbert, _embeddings
+    global _models, _sbert_clf, _dataset, _sbert, _embeddings
 
     print("[INFO] Loading models...")
     _models = {
@@ -39,6 +40,7 @@ def startup():
         "rf":  {"name": "Random Forest",         "model": joblib.load(MODELS_DIR / "rf_model.pkl"),             "vectorizer": joblib.load(MODELS_DIR / "rf_tfidf_vectorizer.pkl")},
         "xgb": {"name": "XGBoost",               "model": joblib.load(MODELS_DIR / "xgb_model.pkl"),            "vectorizer": joblib.load(MODELS_DIR / "xgb_tfidf_vectorizer.pkl")},
     }
+    _sbert_clf = joblib.load(MODELS_DIR / "sbert_lr_classifier.pkl")
 
     print("[INFO] Loading dataset...")
     _dataset = pd.read_csv(DATA_DIR / "cleaned_inflation_dataset.csv")
@@ -110,6 +112,20 @@ def predict(body: PredictRequest):
             "prob_not_relevant": round(proba[0], 4) if proba else None,
         })
 
+    if _sbert is not None and _sbert_clf is not None:
+        emb = _sbert.encode([text])
+        pred = int(_sbert_clf.predict(emb)[0])
+        proba = _sbert_clf.predict_proba(emb)[0].tolist()
+        results.append({
+            "model_key": "sbert",
+            "model": "SBERT + LR",
+            "prediction": pred,
+            "label": "Relevant" if pred == 1 else "Not Relevant",
+            "confidence": round(max(proba), 4),
+            "prob_relevant": round(proba[1], 4),
+            "prob_not_relevant": round(proba[0], 4),
+        })
+
     votes = sum(1 for r in results if r["prediction"] == 1)
     ensemble_pred = 1 if votes > len(results) / 2 else 0
 
@@ -173,6 +189,16 @@ def trends():
 def bigrams(top_n: int = Query(default=20, ge=1, le=100)):
     df = pd.read_csv(DATA_DIR / "bigram_frequency.csv")
     return {"bigrams": df.head(top_n).to_dict(orient="records")}
+
+
+@app.get("/topics")
+def topics():
+    import json
+    topics_path = OUTPUTS_DIR / "lda_topics.json"
+    if not topics_path.exists():
+        raise HTTPException(status_code=503, detail="Topics data not available")
+    with open(topics_path) as f:
+        return json.load(f)
 
 
 @app.post("/similar")

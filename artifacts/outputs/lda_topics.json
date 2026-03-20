@@ -1,0 +1,455 @@
+{
+  "num_topics": 10,
+  "topics": [
+    {
+      "topic_id": 0,
+      "top_words": [
+        {
+          "word": "study",
+          "weight": 0.025133
+        },
+        {
+          "word": "test",
+          "weight": 0.020467
+        },
+        {
+          "word": "economic",
+          "weight": 0.019099
+        },
+        {
+          "word": "research",
+          "weight": 0.015802
+        },
+        {
+          "word": "datum",
+          "weight": 0.011915
+        },
+        {
+          "word": "housing",
+          "weight": 0.011333
+        },
+        {
+          "word": "method",
+          "weight": 0.010899
+        },
+        {
+          "word": "ratio",
+          "weight": 0.00993
+        },
+        {
+          "word": "linear",
+          "weight": 0.009848
+        },
+        {
+          "word": "variable",
+          "weight": 0.009216
+        }
+      ]
+    },
+    {
+      "topic_id": 1,
+      "top_words": [
+        {
+          "word": "forecast",
+          "weight": 0.092376
+        },
+        {
+          "word": "forecasting",
+          "weight": 0.03532
+        },
+        {
+          "word": "variable",
+          "weight": 0.033701
+        },
+        {
+          "word": "method",
+          "weight": 0.021446
+        },
+        {
+          "word": "error",
+          "weight": 0.020671
+        },
+        {
+          "word": "performance",
+          "weight": 0.018514
+        },
+        {
+          "word": "propose",
+          "weight": 0.017734
+        },
+        {
+          "word": "series",
+          "weight": 0.014662
+        },
+        {
+          "word": "mean",
+          "weight": 0.013618
+        },
+        {
+          "word": "base",
+          "weight": 0.01333
+        }
+      ]
+    },
+    {
+      "topic_id": 2,
+      "top_words": [
+        {
+          "word": "rate",
+          "weight": 0.088353
+        },
+        {
+          "word": "growth",
+          "weight": 0.030709
+        },
+        {
+          "word": "exchange",
+          "weight": 0.028419
+        },
+        {
+          "word": "interest",
+          "weight": 0.027065
+        },
+        {
+          "word": "real",
+          "weight": 0.017562
+        },
+        {
+          "word": "estimate",
+          "weight": 0.014281
+        },
+        {
+          "word": "period",
+          "weight": 0.013883
+        },
+        {
+          "word": "relationship",
+          "weight": 0.012381
+        },
+        {
+          "word": "unemployment",
+          "weight": 0.011942
+        },
+        {
+          "word": "money",
+          "weight": 0.011319
+        }
+      ]
+    },
+    {
+      "topic_id": 3,
+      "top_words": [
+        {
+          "word": "policy",
+          "weight": 0.039506
+        },
+        {
+          "word": "monetary",
+          "weight": 0.030976
+        },
+        {
+          "word": "effect",
+          "weight": 0.017724
+        },
+        {
+          "word": "increase",
+          "weight": 0.015956
+        },
+        {
+          "word": "country",
+          "weight": 0.012804
+        },
+        {
+          "word": "change",
+          "weight": 0.012255
+        },
+        {
+          "word": "paper",
+          "weight": 0.011656
+        },
+        {
+          "word": "shock",
+          "weight": 0.011413
+        },
+        {
+          "word": "economy",
+          "weight": 0.011028
+        },
+        {
+          "word": "debt",
+          "weight": 0.010803
+        }
+      ]
+    },
+    {
+      "topic_id": 4,
+      "top_words": [
+        {
+          "word": "price",
+          "weight": 0.053397
+        },
+        {
+          "word": "economic",
+          "weight": 0.015445
+        },
+        {
+          "word": "factor",
+          "weight": 0.014837
+        },
+        {
+          "word": "oil",
+          "weight": 0.014796
+        },
+        {
+          "word": "country",
+          "weight": 0.011236
+        },
+        {
+          "word": "time",
+          "weight": 0.010478
+        },
+        {
+          "word": "market",
+          "weight": 0.007513
+        },
+        {
+          "word": "variable",
+          "weight": 0.007473
+        },
+        {
+          "word": "analysis",
+          "weight": 0.007447
+        },
+        {
+          "word": "study",
+          "weight": 0.007411
+        }
+      ]
+    },
+    {
+      "topic_id": 5,
+      "top_words": [
+        {
+          "word": "risk",
+          "weight": 0.058546
+        },
+        {
+          "word": "financial",
+          "weight": 0.058011
+        },
+        {
+          "word": "asset",
+          "weight": 0.027958
+        },
+        {
+          "word": "return",
+          "weight": 0.027209
+        },
+        {
+          "word": "credit",
+          "weight": 0.02509
+        },
+        {
+          "word": "investor",
+          "weight": 0.018943
+        },
+        {
+          "word": "structure",
+          "weight": 0.018537
+        },
+        {
+          "word": "portfolio",
+          "weight": 0.018039
+        },
+        {
+          "word": "capital",
+          "weight": 0.016523
+        },
+        {
+          "word": "factor",
+          "weight": 0.016191
+        }
+      ]
+    },
+    {
+      "topic_id": 6,
+      "top_words": [
+        {
+          "word": "index",
+          "weight": 0.067009
+        },
+        {
+          "word": "cpi",
+          "weight": 0.044215
+        },
+        {
+          "word": "indicator",
+          "weight": 0.043731
+        },
+        {
+          "word": "network",
+          "weight": 0.035123
+        },
+        {
+          "word": "datum",
+          "weight": 0.035049
+        },
+        {
+          "word": "method",
+          "weight": 0.03048
+        },
+        {
+          "word": "consumer",
+          "weight": 0.029389
+        },
+        {
+          "word": "learn",
+          "weight": 0.028416
+        },
+        {
+          "word": "neural",
+          "weight": 0.027568
+        },
+        {
+          "word": "algorithm",
+          "weight": 0.027398
+        }
+      ]
+    },
+    {
+      "topic_id": 7,
+      "top_words": [
+        {
+          "word": "bank",
+          "weight": 0.068621
+        },
+        {
+          "word": "central",
+          "weight": 0.032032
+        },
+        {
+          "word": "election",
+          "weight": 0.022019
+        },
+        {
+          "word": "loss",
+          "weight": 0.021086
+        },
+        {
+          "word": "target",
+          "weight": 0.020937
+        },
+        {
+          "word": "output",
+          "weight": 0.020457
+        },
+        {
+          "word": "density",
+          "weight": 0.016857
+        },
+        {
+          "word": "function",
+          "weight": 0.016301
+        },
+        {
+          "word": "banking",
+          "weight": 0.012918
+        },
+        {
+          "word": "presidential",
+          "weight": 0.012386
+        }
+      ]
+    },
+    {
+      "topic_id": 8,
+      "top_words": [
+        {
+          "word": "market",
+          "weight": 0.079589
+        },
+        {
+          "word": "stock",
+          "weight": 0.063279
+        },
+        {
+          "word": "expectation",
+          "weight": 0.019946
+        },
+        {
+          "word": "return",
+          "weight": 0.01877
+        },
+        {
+          "word": "reserve",
+          "weight": 0.01678
+        },
+        {
+          "word": "sector",
+          "weight": 0.012844
+        },
+        {
+          "word": "economist",
+          "weight": 0.012474
+        },
+        {
+          "word": "future",
+          "weight": 0.012213
+        },
+        {
+          "word": "expect",
+          "weight": 0.012108
+        },
+        {
+          "word": "history",
+          "weight": 0.011738
+        }
+      ]
+    },
+    {
+      "topic_id": 9,
+      "top_words": [
+        {
+          "word": "regime",
+          "weight": 0.028299
+        },
+        {
+          "word": "yield",
+          "weight": 0.027858
+        },
+        {
+          "word": "energy",
+          "weight": 0.024642
+        },
+        {
+          "word": "agent",
+          "weight": 0.02019
+        },
+        {
+          "word": "belief",
+          "weight": 0.017138
+        },
+        {
+          "word": "excess",
+          "weight": 0.0169
+        },
+        {
+          "word": "contract",
+          "weight": 0.015188
+        },
+        {
+          "word": "sale",
+          "weight": 0.015065
+        },
+        {
+          "word": "pressure",
+          "weight": 0.013029
+        },
+        {
+          "word": "plan",
+          "weight": 0.012936
+        }
+      ]
+    }
+  ]
+}
