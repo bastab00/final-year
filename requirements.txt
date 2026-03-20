@@ -1,0 +1,16 @@
+pandas
+numpy
+scikit-learn
+xgboost
+sentence-transformers
+bertopic
+joblib
+nltk
+shap
+matplotlib
+openpyxl
+requests
+streamlit
+fastapi
+uvicorn
+gensim
