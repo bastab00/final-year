@@ -6,8 +6,28 @@ import joblib
 import pandas as pd
 import numpy as np
 import warnings
+import re
+import string
 
 warnings.filterwarnings("ignore")
+
+import nltk
+for _res in ("stopwords", "wordnet", "omw-1.4"):
+    nltk.download(_res, quiet=True)
+from nltk.corpus import stopwords as _sw
+from nltk.stem import WordNetLemmatizer as _WNL
+
+_stop_words = set(_sw.words("english"))
+_lemmatizer = _WNL()
+
+def _clean(text: str) -> str:
+    """Apply same preprocessing used during training."""
+    text = text.lower()
+    text = re.sub(r"\d+", "", text)
+    text = text.translate(str.maketrans("", "", string.punctuation))
+    text = re.sub(r"\s+", " ", text).strip()
+    tokens = [_lemmatizer.lemmatize(w) for w in text.split() if w not in _stop_words]
+    return " ".join(tokens)
 
 BASE = Path(__file__).resolve().parents[2]
 MODELS_DIR = BASE / "artifacts" / "models"
@@ -96,9 +116,10 @@ def predict(body: PredictRequest):
     if not text:
         raise HTTPException(status_code=400, detail="Abstract cannot be empty")
 
+    cleaned_text = _clean(text)
     results = []
     for key, m in _models.items():
-        vec = m["vectorizer"].transform([text])
+        vec = m["vectorizer"].transform([cleaned_text])
         pred = int(m["model"].predict(vec)[0])
         proba = m["model"].predict_proba(vec)[0].tolist() if hasattr(m["model"], "predict_proba") else None
 
