@@ -240,10 +240,12 @@ def similar(body: SimilarRequest):
     results = []
     for rank, idx in enumerate(top_idx, 1):
         row = _dataset.iloc[int(idx)]
+        abstract_raw = row.get("Abstract", "") or ""
+        abstract_str = "" if str(abstract_raw) == "nan" else str(abstract_raw)
         results.append({
             "rank": rank,
-            "doi": str(row.get("DOI", "")),
-            "abstract_preview": str(row.get("Abstract", ""))[:300] + "...",
+            "doi": str(row.get("DOI", "") or ""),
+            "abstract_preview": abstract_str[:300] + ("..." if len(abstract_str) > 300 else ""),
             "label": int(row["Label"]),
             "label_text": "Relevant" if row["Label"] == 1 else "Not Relevant",
             "similarity_score": round(float(scores[idx]), 4),

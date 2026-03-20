@@ -114,7 +114,7 @@ export function ClassifyClient() {
                       </div>
                       <div className="rounded bg-muted px-2 py-1">
                         <span className="block font-medium text-foreground">
-                          {(p.prob_not_relevant! * 100).toFixed(1)}%
+                          {((p.prob_not_relevant ?? 0) * 100).toFixed(1)}%
                         </span>
                         Not Relevant
                       </div>
