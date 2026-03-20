@@ -1,5 +1,7 @@
 # inflation research classifier
 
+> ⚠️ this is a final year academic project, not production software. the models were trained on a limited dataset and have not been fine-tuned for real-world use. do not use this for any production or research-critical purpose. predictions may be inaccurate.
+
 a full-stack app that classifies academic abstracts as relevant or not relevant to inflation research, using a set of trained ml models.
 
 ## what it does
