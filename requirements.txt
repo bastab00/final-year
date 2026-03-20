@@ -8,3 +8,4 @@ joblib
 sentence-transformers
 openpyxl
 requests
+nltk
