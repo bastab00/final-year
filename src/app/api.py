@@ -9,6 +9,12 @@ import warnings
 import re
 import string
 
+import os
+from dotenv import load_dotenv
+import psycopg2
+
+load_dotenv()
+
 warnings.filterwarnings("ignore")
 
 import nltk
@@ -110,6 +116,16 @@ def health():
     }
 
 
+def get_db_connection():
+    return psycopg2.connect(
+        dbname=os.getenv("DB_NAME"),
+        user=os.getenv("DB_USER"),
+        password=os.getenv("DB_PASSWORD"),
+        host=os.getenv("DB_HOST"),
+        port=os.getenv("DB_PORT"),
+    )
+
+
 @app.post("/predict")
 def predict(body: PredictRequest):
     text = body.abstract.strip()
@@ -118,6 +134,8 @@ def predict(body: PredictRequest):
 
     cleaned_text = _clean(text)
     results = []
+
+    # ---- Traditional ML models ----
     for key, m in _models.items():
         vec = m["vectorizer"].transform([cleaned_text])
         pred = int(m["model"].predict(vec)[0])
@@ -133,10 +151,12 @@ def predict(body: PredictRequest):
             "prob_not_relevant": round(proba[0], 4) if proba else None,
         })
 
+    # ---- SBERT model ----
     if _sbert is not None and _sbert_clf is not None:
         emb = _sbert.encode([text])
         pred = int(_sbert_clf.predict(emb)[0])
         proba = _sbert_clf.predict_proba(emb)[0].tolist()
+
         results.append({
             "model_key": "sbert",
             "model": "SBERT + LR",
@@ -147,9 +167,37 @@ def predict(body: PredictRequest):
             "prob_not_relevant": round(proba[0], 4),
         })
 
+    # ---- Ensemble ----
     votes = sum(1 for r in results if r["prediction"] == 1)
     ensemble_pred = 1 if votes > len(results) / 2 else 0
 
+    # ---- Optional: average confidence ----
+    confidences = [r["confidence"] for r in results if r["confidence"] is not None]
+    avg_confidence = round(float(np.mean(confidences)), 4) if confidences else None
+
+    # ---- Store in PostgreSQL ----
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+
+        cur.execute("""
+            INSERT INTO predictions (text, prediction, confidence, model_used)
+            VALUES (%s, %s, %s, %s)
+        """, (
+            text,
+            str(ensemble_pred),
+            avg_confidence,
+            "ensemble"
+        ))
+
+        conn.commit()
+        cur.close()
+        conn.close()
+
+    except Exception as e:
+        print("[DB ERROR]", e)
+
+    # ---- Response ----
     return {
         "abstract_preview": text[:300] + "..." if len(text) > 300 else text,
         "predictions": results,
@@ -158,9 +206,9 @@ def predict(body: PredictRequest):
             "label": "Relevant" if ensemble_pred == 1 else "Not Relevant",
             "votes_for": votes,
             "total_models": len(results),
+            "confidence": avg_confidence
         },
     }
-
 
 @app.get("/metrics")
 def metrics():
