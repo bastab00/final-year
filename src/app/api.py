@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from pathlib import Path
+from .prebict import classify_abstract
 import joblib
 import pandas as pd
 import numpy as np
@@ -12,6 +13,7 @@ import string
 import os
 from dotenv import load_dotenv
 import psycopg2
+import google.generativeai as genai
 
 load_dotenv()
 
@@ -61,15 +63,38 @@ def startup():
 
     print("[INFO] Loading models...")
     _models = {
-        "lr":  {"name": "Logistic Regression", "model": joblib.load(MODELS_DIR / "baseline_lr_model.pkl"),    "vectorizer": joblib.load(MODELS_DIR / "tfidf_vectorizer.pkl")},
-        "svm": {"name": "SVM (Calibrated)",     "model": joblib.load(MODELS_DIR / "svm_calibrated_model.pkl"), "vectorizer": joblib.load(MODELS_DIR / "svm_tfidf_vectorizer.pkl")},
-        "rf":  {"name": "Random Forest",         "model": joblib.load(MODELS_DIR / "rf_model.pkl"),             "vectorizer": joblib.load(MODELS_DIR / "rf_tfidf_vectorizer.pkl")},
-        "xgb": {"name": "XGBoost",               "model": joblib.load(MODELS_DIR / "xgb_model.pkl"),            "vectorizer": joblib.load(MODELS_DIR / "xgb_tfidf_vectorizer.pkl")},
+        "lr": {
+            "name": "Logistic Regression",
+            "model": joblib.load(MODELS_DIR / "baseline_lr_model_latest.pkl"),
+            "vectorizer": joblib.load(MODELS_DIR / "tfidf_vectorizer_latest.pkl")
+        },
+
+        "rf": {
+            "name": "Random Forest",
+            "model": joblib.load(MODELS_DIR / "rf_model_latest.pkl"),
+            "vectorizer": joblib.load(MODELS_DIR / "rf_tfidf_vectorizer_latest.pkl")
+        },
+
+        "xgb": {
+            "name": "XGBoost",
+            "model": joblib.load(MODELS_DIR / "xgb_model_latest.pkl"),
+            "vectorizer": joblib.load(MODELS_DIR / "xgb_tfidf_vectorizer_latest.pkl")
+        },
+
+        "svm": {
+            "name": "Gaussian SVM",
+            "model": joblib.load(MODELS_DIR / "gaussian_svm_model_latest.pkl"),
+            "vectorizer": joblib.load(MODELS_DIR / "gaussian_svm_tfidf_vectorizer_latest.pkl")
+        }
     }
-    _sbert_clf = joblib.load(MODELS_DIR / "sbert_lr_classifier.pkl")
+
+    _sbert_clf = joblib.load(
+        MODELS_DIR /
+        "sbert_lr_classifier_latest.pkl"
+    )
 
     print("[INFO] Loading dataset...")
-    _dataset = pd.read_csv(DATA_DIR / "cleaned_inflation_dataset.csv")
+    _dataset = pd.read_csv(DATA_DIR / "dataset_latest_version.csv")
 
     print("[INFO] Loading SBERT model...")
     try:
@@ -210,9 +235,83 @@ def predict(body: PredictRequest):
         },
     }
 
+@app.post("/prebict")
+def prebict(body: PredictRequest):
+
+    text = body.abstract.strip()
+
+    if not text:
+
+        raise HTTPException(
+            status_code=400,
+            detail="Abstract cannot be empty"
+        )
+
+    try:
+        result = classify_abstract(text)
+    except Exception as e:
+        print("[PREBICT ERROR]", e)
+        raise HTTPException(status_code=502, detail=f"Prebict service failed: {e}")
+
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+
+        cur.execute("""
+            INSERT INTO predictions
+            (
+                text,
+                prediction,
+                confidence,
+                model_used
+            )
+            VALUES
+            (%s,%s,%s,%s)
+        """,
+        (
+            text,
+            str(result["prediction"]),
+            None,
+            "gemini"
+        ))
+
+        conn.commit()
+
+        cur.close()
+        conn.close()
+
+    except Exception as e:
+
+        print(
+            "[DB ERROR]",
+            e
+        )
+
+    return {
+        "abstract_preview": text[:300] + "..." if len(text) > 300 else text,
+
+        "predictions": [
+            {
+                "model_key": "gemini",
+                "model": "Gemini",
+                "prediction": result["prediction"],
+                "label": result["label"],
+                "confidence": None
+            }
+        ],
+
+        "ensemble": {
+            "prediction": result["prediction"],
+            "label": result["label"],
+            "votes_for": 1,
+            "total_models": 1,
+            "confidence": None
+        }
+    }
+
 @app.get("/metrics")
 def metrics():
-    df = pd.read_csv(OUTPUTS_DIR / "model_comparison_results.csv")
+    df = pd.read_csv(OUTPUTS_DIR / "model_comparison_results_latest.csv")
     records = df.round(4).to_dict(orient="records")
     return {"models": records}
 

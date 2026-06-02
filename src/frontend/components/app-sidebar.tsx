@@ -35,11 +35,11 @@ const data = {
       url: "/classify",
       icon: <BrainCircuitIcon />,
     },
-    {
-      title: "Model Comparison",
-      url: "/models",
-      icon: <BarChart3Icon />,
-    },
+    // {
+    //   title: "Model Comparison",
+    //   url: "/models",
+    //   icon: <BarChart3Icon />,
+    // },
     {
       title: "Bibliometrics",
       url: "/bibliometrics",

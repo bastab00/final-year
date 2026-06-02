@@ -73,7 +73,7 @@ export function DashboardClient() {
           <CardContent>
             {loading ? <Skeleton className="h-64 w-full" /> : (
               <ResponsiveContainer width="100%" height={260}>
-                <BarChart data={metrics} layout="vertical" margin={{ left: 20 }}>
+                <BarChart data={metrics.filter((m) => m.Model !== "SBERT + SVM")} layout="vertical" margin={{ left: 20 }}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis type="number" domain={[0.8, 1]} tickFormatter={(v) => `${(v * 100).toFixed(0)}%`} />
                   <YAxis type="category" dataKey="Model" width={130} tick={{ fontSize: 12 }} />

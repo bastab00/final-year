@@ -22,8 +22,12 @@ export function ClassifyClient() {
     try {
       const data = await api.predict(abstract);
       setResult(data);
-    } catch {
-      setError("Failed to connect to the API. Make sure the backend is running on port 8000.");
+    } catch (error) {
+      setError(
+        error instanceof Error
+          ? `API error: ${error.message}`
+          : "Failed to connect to the API. Make sure the backend is running on port 8000."
+      );
     } finally {
       setLoading(false);
     }
@@ -58,15 +62,13 @@ export function ClassifyClient() {
 
       {result && (
         <>
+          {/* Ensemble Verdict - Only Result Shown */}
           <Card className={result.ensemble.prediction === 1 ? "border-green-500" : "border-red-400"}>
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground">Ensemble Verdict</p>
                   <p className="text-2xl font-bold">{result.ensemble.label}</p>
-                  <p className="text-sm text-muted-foreground">
-                    {result.ensemble.votes_for} of {result.ensemble.total_models} models agree
-                  </p>
                 </div>
                 <Badge
                   className="text-lg px-4 py-2"
@@ -78,6 +80,8 @@ export function ClassifyClient() {
             </CardContent>
           </Card>
 
+          {/* COMMENTED OUT: Individual model breakdowns - no longer needed */}
+          {/* 
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {result.predictions.map((p) => (
               <Card key={p.model_key}>
@@ -124,6 +128,7 @@ export function ClassifyClient() {
               </Card>
             ))}
           </div>
+          */}
         </>
       )}
     </PageShell>
