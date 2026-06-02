@@ -5,7 +5,7 @@ import google.generativeai as genai
 
 load_dotenv()
 
-GEMINI_API_KEY = "AQ.Ab8RN6IZmsSd-7-HwOnFxv6bbOOK_iXgagd4d8NdL9O37cD7UA"
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
 genai.configure(
     api_key=GEMINI_API_KEY
