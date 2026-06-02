@@ -17,7 +17,7 @@ import numpy as np
 # -----------------------------------------
 # 1. Load dataset
 # -----------------------------------------
-df = pd.read_csv("../../data/processed/cleaned_inflation_dataset.csv")
+df = pd.read_csv("../../data/processed/dataset_latest_version.csv")
 
 X = df["Abstract"]     # Use full abstract (not cleaned)
 y = df["Label"]
@@ -158,7 +158,7 @@ print("Accuracy:", accuracy_score(true_labels, preds))
 # -----------------------------------------
 # 7. Save Model
 # -----------------------------------------
-model.save_pretrained("../../artifacts/models/bert_classifier")
-tokenizer.save_pretrained("../../artifacts/models/bert_classifier")
+model.save_pretrained("../../artifacts/models/bert_classifier_latest")
+tokenizer.save_pretrained("../../artifacts/models/bert_classifier_latest")
 
-print("\n[INFO] Fine-tuned BERT model saved to: bert_classifier/")
+print("\n[INFO] Fine-tuned BERT model saved to: bert_classifier_latest/")

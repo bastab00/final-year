@@ -9,7 +9,7 @@ import pickle
 # ---------------------------------------------------------
 # 1. Load cleaned dataset
 # ---------------------------------------------------------
-df = pd.read_csv("../../data/processed/cleaned_inflation_dataset.csv")
+df = pd.read_csv("../../data/processed/dataset_latest_version.csv")
 
 X = df["Cleaned_Abstract"]
 y = df["Label"]
@@ -56,7 +56,7 @@ print("\nAccuracy:", accuracy_score(y_test, y_pred))
 # ---------------------------------------------------------
 # 6. Save model + vectorizer
 # ---------------------------------------------------------
-pickle.dump(model, open("../../artifacts/models/baseline_lr_model.pkl", "wb"))
-pickle.dump(vectorizer, open("../../artifacts/models/tfidf_vectorizer.pkl", "wb"))
+pickle.dump(model, open("../../artifacts/models/baseline_lr_model_latest.pkl", "wb"))
+pickle.dump(vectorizer, open("../../artifacts/models/tfidf_vectorizer_latest.pkl", "wb"))
 
-print("\n[INFO] Saved baseline_lr_model.pkl and tfidf_vectorizer.pkl")
+print("\n[INFO] Saved baseline_lr_model_latest.pkl and tfidf_vectorizer_latest.pkl")

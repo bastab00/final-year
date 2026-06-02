@@ -9,7 +9,7 @@ import pickle
 # ---------------------------------------------------------
 # 1. Load dataset
 # ---------------------------------------------------------
-df = pd.read_csv("../../data/processed/cleaned_inflation_dataset.csv")
+df = pd.read_csv("../../data/processed/dataset_latest_version.csv")
 
 X = df["Abstract"]    # USE RAW ABSTRACT for SBERT
 y = df["Label"]
@@ -58,7 +58,7 @@ print("\nAccuracy:", accuracy_score(y_test, y_pred))
 # ---------------------------------------------------------
 # 7. Save model + embeddings model
 # ---------------------------------------------------------
-pickle.dump(classifier, open("../../artifacts/models/sbert_svm_model.pkl", "wb"))
-model.save("../../artifacts/models/sbert_embedding_model/")
+pickle.dump(classifier, open("../../artifacts/models/sbert_svm_model_latest.pkl", "wb"))
+model.save("../../artifacts/models/sbert_embedding_model_latest/")
 
-print("\n[INFO] Saved sbert_svm_model.pkl and SBERT model folder.")
+print("\n[INFO] Saved sbert_svm_model_latest.pkl and SBERT model folder.")
